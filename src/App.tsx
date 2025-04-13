@@ -1,7 +1,7 @@
 // App.tsx
 import { useState } from 'react';
 import TokenAlert from './components/TokenAlert';
-import TokenAnalysis from './components/TokenAnalysis';
+import TokenAnalysis from './pages/TokenAnalysis';
 
 export default function App() {
   const [input, setInput] = useState('');
