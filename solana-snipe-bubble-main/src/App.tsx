@@ -1,36 +1,39 @@
+// App.tsx
+import { useState } from 'react';
+import TokenAlert from './components/TokenAlert';
+import TokenAnalysis from './components/TokenAnalysis';
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from '@/components/ui/toaster';
-import Index from '@/pages/Index';
-import TokenAnalysis from '@/pages/TokenAnalysis';
-import NotFound from '@/pages/NotFound';
-import './App.css';
+export default function App() {
+  const [input, setInput] = useState('');
+  const [tokenAddress, setTokenAddress] = useState('');
 
-// Create a query client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+  const handleAnalyze = () => {
+    if (input.trim()) setTokenAddress(input.trim());
+  };
 
-function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/token/:address" element={<TokenAnalysis />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-      <Toaster />
-    </QueryClientProvider>
+    <div className="min-h-screen bg-gray-100 p-6 space-y-6">
+      <h1 className="text-3xl font-bold text-center text-blue-600">SolRadar 🔍</h1>
+
+      <div className="max-w-xl mx-auto flex gap-2">
+        <input
+          type="text"
+          placeholder="Paste Solana Token Address..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="flex-grow p-2 border rounded-md"
+        />
+        <button
+          onClick={handleAnalyze}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          Analyze
+        </button>
+      </div>
+
+      {tokenAddress && <TokenAnalysis tokenAddress={tokenAddress} />}
+
+      <TokenAlert />
+    </div>
   );
 }
-
-export default App;
