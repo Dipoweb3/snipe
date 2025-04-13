@@ -42,8 +42,8 @@ const TokenAlert: React.FC<TokenAlertProps> = ({ alert, onView, onMarkAsRead }) 
     >
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className={`p-2 rounded-full ${alert/.isRead ? 'bg-muted' : 'bg-solana-purple/20'}`}>
-            <Bell className={`h-5 w-5 ${alert.isRead ? 'text-muted-foreground' : 'text-solana-purple'}`} />
+          <div className={`p-2 rounded-full ${alert?.isRead ? 'bg-muted' : 'bg-solana-purple/20'}`}>
+            <Bell className={`h-5 w-5 ${alert?.isRead ? 'text-muted-foreground' : 'text-solana-purple'}`} />
           </div>
           
           <div className="flex-1">
@@ -80,7 +80,7 @@ const TokenAlert: React.FC<TokenAlertProps> = ({ alert, onView, onMarkAsRead }) 
                 className="text-xs h-7 text-muted-foreground hover:text-primary"
                 onClick={() => onMarkAsRead(alert.id)}
               >
-                {alert.isRead ? 'Mark as unread' : 'Mark as read'}
+                {alert?.isRead ? 'Mark as unread' : 'Mark as read'}
               </Button>
               <Button 
                 variant="outline" 
