@@ -38,11 +38,11 @@ const TokenAlert: React.FC<TokenAlertProps> = ({ alert, onView, onMarkAsRead }) 
 
   return (
     <Card 
-      className={`bg-card border-l-4 ${alert.isRead ? 'border-l-muted' : 'border-l-solana-purple'} mb-2 hover:bg-muted/10 transition-colors ${!alert.isRead ? 'animate-pulse-glow' : ''}`}
+      className={`bg-card border-l-4 ${alert?.isRead ? 'border-l-muted' : 'border-l-solana-purple'} mb-2 hover:bg-muted/10 transition-colors ${!alert.isRead ? 'animate-pulse-glow' : ''}`}
     >
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className={`p-2 rounded-full ${alert.isRead ? 'bg-muted' : 'bg-solana-purple/20'}`}>
+          <div className={`p-2 rounded-full ${alert/.isRead ? 'bg-muted' : 'bg-solana-purple/20'}`}>
             <Bell className={`h-5 w-5 ${alert.isRead ? 'text-muted-foreground' : 'text-solana-purple'}`} />
           </div>
           
