@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Bell, ArrowUpRight, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -42,10 +41,10 @@ const TokenAlert: React.FC<TokenAlertProps> = ({ alert, onView, onMarkAsRead }) 
     >
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-        <div className={`p-2 rounded-full ${alert/.isRead ? 'bg-muted' : 'bg-solana-purple/20'}`}>
+          <div className={`p-2 rounded-full ${alert?.isRead ? 'bg-muted' : 'bg-solana-purple/20'}`}>
             <Bell className={`h-5 w-5 ${alert?.isRead ? 'text-muted-foreground' : 'text-solana-purple'}`} />
           </div>
-          
+
           <div className="flex-1">
             <div className="flex justify-between items-start">
               <div>
@@ -57,9 +56,9 @@ const TokenAlert: React.FC<TokenAlertProps> = ({ alert, onView, onMarkAsRead }) 
               </div>
               <span className="text-xs text-muted-foreground">{timeAgo(alert.timestamp)}</span>
             </div>
-            
+
             <p className="text-sm mt-1">{alert.reason}</p>
-            
+
             {alert.volume && (
               <div className="flex items-center mt-2 text-sm">
                 <span className="text-muted-foreground">Volume: </span>
@@ -72,7 +71,7 @@ const TokenAlert: React.FC<TokenAlertProps> = ({ alert, onView, onMarkAsRead }) 
                 )}
               </div>
             )}
-            
+
             <div className="flex justify-end mt-2">
               <Button 
                 variant="ghost" 
@@ -86,7 +85,7 @@ const TokenAlert: React.FC<TokenAlertProps> = ({ alert, onView, onMarkAsRead }) 
                 variant="outline" 
                 size="sm" 
                 className="text-xs h-7 ml-2 border-solana-purple/20 text-solana-purple"
-                onClick={() => onView(alert.id, alert.address)} // Pass the address
+                onClick={() => onView(alert.id, alert.address)}
               >
                 View <ChevronRight className="h-3 w-3 ml-0.5" />
               </Button>
