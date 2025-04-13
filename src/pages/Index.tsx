@@ -28,63 +28,53 @@ const Index = () => {
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  // Fetch token data with React Query
   const { data: tokens = [], isLoading: tokensLoading } = useQuery({
     queryKey: ['tokens'],
     queryFn: fetchPopularTokens,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
-  // Fetch alerts with React Query
   const { data: alerts = [], isLoading: alertsLoading } = useQuery({
     queryKey: ['alerts'],
     queryFn: fetchAlerts,
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 30 * 1000, // Poll every 30 seconds for new alerts
+    staleTime: 2 * 60 * 1000,
+    refetchInterval: 30 * 1000,
   });
 
-  // Fetch wallet bubble data
   const { data: tokenWalletData = [] } = useQuery({
     queryKey: ['walletBubbles', 'token'],
     queryFn: () => fetchWalletConnections('token'),
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 10 * 60 * 1000,
   });
 
-  // Fetch minter bubble data
   const { data: minterWalletData = [] } = useQuery({
     queryKey: ['walletBubbles', 'minter'],
     queryFn: () => fetchWalletConnections('minter'),
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 10 * 60 * 1000,
   });
 
-  // For search functionality
   const [searchResults, setSearchResults] = useState<TokenData[]>([]);
   const [noResults, setNoResults] = useState(false);
-
   const [localAlerts, setLocalAlerts] = useState<TokenAlertData[]>([]);
 
-  // Update local alerts when server data changes
   React.useEffect(() => {
     if (alerts.length) {
       setLocalAlerts(alerts);
     }
   }, [alerts]);
 
-  const unreadCount = localAlerts.filter(alert => !alert.isRead).length;
+  const unreadCount = localAlerts.filter(alert => !alert?.isRead).length;
 
   const handleViewToken = (address: string) => {
     navigate(`/token/${address}`);
   };
 
   const handleViewAlert = (id: string, address: string) => {
-    // Navigate to the token analysis page with the address
     if (address) {
       navigate(`/token/${address}`);
     } else {
-      // Find the token associated with this alert if address not provided
       const alert = localAlerts.find(a => a.id === id);
       if (alert) {
-        // Find the corresponding token
         const token = tokens.find(t => t.symbol === alert.symbol);
         if (token) {
           navigate(`/token/${token.address}`);
@@ -95,28 +85,26 @@ const Index = () => {
 
   const handleMarkAsRead = (id: string) => {
     setLocalAlerts(prev => prev.map(alert => 
-      alert.id === id ? { ...alert, isRead: !alert.isRead } : alert
+      alert.id === id ? { ...alert, isRead: !alert?.isRead } : alert
     ));
-    
+
     toast({
       title: "Alert updated",
       description: "Notification status has been updated",
     });
   };
 
-  // Handle token search
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
-    
+
     setIsSearching(true);
     setNoResults(false);
-    
+
     try {
       const result = await searchToken(searchQuery.trim());
-      
+
       if (result) {
         setSearchResults([result]);
-        
         toast({
           title: "Token found",
           description: `Found ${result.symbol} (${result.name})`,
@@ -124,10 +112,9 @@ const Index = () => {
       } else {
         setSearchResults([]);
         setNoResults(true);
-        
         toast({
           title: "No token found",
-          description: `No token matching "${searchQuery}" was found`,
+          description: `No token matching \"${searchQuery}\" was found`,
           variant: "destructive"
         });
       }
@@ -135,7 +122,6 @@ const Index = () => {
       console.error('Search error:', error);
       setSearchResults([]);
       setNoResults(true);
-      
       toast({
         title: "Search error",
         description: "Failed to search for token. Please try again.",
@@ -146,20 +132,17 @@ const Index = () => {
     }
   };
 
-  // Filter tokens based on search query for local filtering
   const getFilteredTokens = () => {
-    // If we have search results, show those
     if (searchResults.length > 0) {
       return searchResults;
     }
-    
-    // Otherwise filter the popular tokens
+
     return tokens.filter(token => 
       token.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
       token.symbol.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
-  
+
   const filteredTokens = getFilteredTokens();
 
   return (
@@ -168,7 +151,7 @@ const Index = () => {
         title="Solana Snipe Bot" 
         subtitle="Track tokens, wallets, and get alerts"
       />
-      
+
       <div className="flex-1 overflow-auto p-4">
         <form 
           className="mb-4" 
@@ -183,7 +166,6 @@ const Index = () => {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                // Clear search results when input changes
                 if (searchResults.length > 0) {
                   setSearchResults([]);
                   setNoResults(false);
@@ -202,7 +184,7 @@ const Index = () => {
             </Button>
           </div>
         </form>
-        
+
         <Tabs defaultValue="tokens" className="mb-4">
           <TabsList className="bg-muted/50 w-full">
             <TabsTrigger value="tokens" className="flex-1">
@@ -223,7 +205,7 @@ const Index = () => {
               Analysis
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="tokens" className="mt-4 space-y-4">
             <div className="grid grid-cols-1 gap-4">
               {isSearching ? (
@@ -253,7 +235,7 @@ const Index = () => {
               )}
             </div>
           </TabsContent>
-          
+
           <TabsContent value="alerts" className="mt-4">
             {alertsLoading ? (
               <div className="text-center py-6 text-muted-foreground">
@@ -274,16 +256,16 @@ const Index = () => {
               </div>
             )}
           </TabsContent>
-          
+
           <TabsContent value="analysis" className="mt-4 space-y-4">
             <BubbleMap
               title="Token Wallet Relationships"
               description="Visualize connections between wallets and tokens"
               data={tokenWalletData}
             />
-            
+
             <Separator className="my-6 bg-solana-purple/20" />
-            
+
             <BubbleMap
               title="Serial Minter Analysis"
               description="Detect connections between creator wallets and other tokens"
@@ -292,8 +274,7 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
-      
-      {/* Bottom Navigation */}
+
       <div className="bg-card border-t border-solana-purple/20 p-2">
         <div className="grid grid-cols-5 gap-1">
           <Button variant="ghost" size="icon" className="flex flex-col items-center justify-center h-14 rounded-lg">
