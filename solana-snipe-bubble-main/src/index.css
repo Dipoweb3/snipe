@@ -1,0 +1,76 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 240 15% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 240 15% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 267 100% 63%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 157 91% 51%;
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 240 10% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 157 91% 51%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 10% 18%;
+    --input: 240 10% 18%;
+    --ring: 267 100% 63%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-solana-dark text-foreground antialiased;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-solana-dark/50;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-solana-purple/40 rounded-full hover:bg-solana-purple/70 transition-colors;
+  }
+}
+
+@layer components {
+  .bubble {
+    @apply rounded-full flex items-center justify-center text-xs font-semibold cursor-pointer transition-all;
+  }
+  
+  .glow {
+    box-shadow: 0 0 15px theme('colors.solana.DEFAULT');
+  }
+  
+  .glow-purple {
+    box-shadow: 0 0 15px theme('colors.solana.purple');
+  }
+}
